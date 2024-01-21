@@ -48,7 +48,8 @@ describe('[Challenge] Unstoppable', function () {
     });
 
     after(async function () {
-        /** SUCCESS CONDITIONS - NO NEED TO CHANGE ANYTHING HERE */
+        const amountToTransfer = ethers.utils.parseUnits("1", 18); // 1 token
+        await token.connect(player).transfer(vault.address, amountToTransfer);
 
         // It is no longer possible to execute flash loans
         await expect(

